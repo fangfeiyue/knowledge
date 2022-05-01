@@ -1,14 +1,20 @@
 <template>
-  <div @click="onClick">{{ name }}</div>
+  <div @click="onClick">{{ user.name }}</div>
   <div></div>
 </template>
 <script setup lang="ts">
 import { defineProps, defineEmits } from 'vue'
-const props = defineProps({
-  name: String
-})
-const emit = defineEmits(['change-name'])
+interface IUser {
+  name: string
+}
+const props = defineProps<{user: IUser}>()
+
+interface IEvent {
+  (e: 'change-name', name: string): void
+}
+const emit = defineEmits<IEvent>()
+
 const onClick = () => {
-  emit('change-name', props.name)
+  emit('change-name', props.user.name)
 }
 </script>

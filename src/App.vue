@@ -1,11 +1,13 @@
 <template>
-  <user :name="name" @change-name="changeName"/>
+  <User :user="user" @change-name="changeName"/>
+  <ColumnList/>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue'
+import { reactive } from 'vue'
 import User from './components/User.vue'
-const name = ref('f')
+import ColumnList from './components/ColumnList.vue'
+const user = reactive({ name: 'f' })
 const changeName = (val:string) => {
-  name.value = val + 'y'
+  user.name = val + 'y'
 }
 </script>
