@@ -1,10 +1,18 @@
 <template>
+  <GlobalHeader :user="user"/>
   <ColumnList :list="list"/>
 </template>
 <script setup lang="ts">
 import 'bootstrap/dist/css/bootstrap.min.css'
-import ColumnList, { ColumnProps } from './components/ColumnList.vue'
-const list: ColumnProps[] = [
+import ColumnList, { IColumnProps } from './components/ColumnList.vue'
+import GlobalHeader, { IUserProps } from './components/GlobalHeader.vue'
+
+const user: IUserProps = {
+  name: 'fang',
+  id: 1,
+  isLogin: false
+}
+const list: IColumnProps[] = [
   {
     id: 1,
     title: '你好',

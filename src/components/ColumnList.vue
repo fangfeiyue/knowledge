@@ -17,7 +17,7 @@
 </template>
 <script setup lang="ts">
 import { defineProps, PropType, computed } from 'vue'
-export interface ColumnProps {
+export interface IColumnProps {
   id: number,
   title: string,
   avatar?: string,
@@ -25,7 +25,7 @@ export interface ColumnProps {
 }
 const props = defineProps({
   list: {
-    type: Array as PropType<ColumnProps[]>,
+    type: Array as PropType<IColumnProps[]>,
     required: true
   }
 })
