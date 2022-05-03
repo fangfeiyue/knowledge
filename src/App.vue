@@ -1,6 +1,8 @@
 <template>
-  <GlobalHeader :user="user"/>
-  <ColumnList :list="list"/>
+  <div class="container">
+    <GlobalHeader :user="user"/>
+    <ColumnList :list="list"/>
+  </div>
 </template>
 <script setup lang="ts">
 import 'bootstrap/dist/css/bootstrap.min.css'
@@ -10,7 +12,7 @@ import GlobalHeader, { IUserProps } from './components/GlobalHeader.vue'
 const user: IUserProps = {
   name: 'fang',
   id: 1,
-  isLogin: false
+  isLogin: true
 }
 const list: IColumnProps[] = [
   {
