@@ -1,11 +1,23 @@
 <template>
   <div class="container">
-    <GlobalHeader :user="user"/>
-    <ColumnList :list="list"/>
+    <GlobalHeader :user="user" />
+    <!-- <ColumnList :list="list"/> -->
+    <form>
+      <div class="mb-3">
+        <label for="exampleInputEmail1" class="form-label">Email address</label>
+        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" v-model="email.val" @blur="validateEamil">
+        <div v-if="email.error" id="emailHelp" class="form-text">{{ email.msg }}</div>
+      </div>
+      <div class="mb-3">
+        <label for="exampleInputPassword1" class="form-label">Password</label>
+        <input type="password" class="form-control" id="exampleInputPassword1">
+      </div>
+    </form>
   </div>
 </template>
 <script setup lang="ts">
 import 'bootstrap/dist/css/bootstrap.min.css'
+import { reactive } from 'vue'
 import ColumnList, { IColumnProps } from './components/ColumnList.vue'
 import GlobalHeader, { IUserProps } from './components/GlobalHeader.vue'
 
@@ -40,4 +52,23 @@ const list: IColumnProps[] = [
     description: '你好你好'
   }
 ]
+const email = reactive({
+  val: '',
+  msg: '',
+  error: false
+})
+const emailReg = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
+const validateEamil = () => {
+  if (email.val.trim() === '') {
+    email.error = true
+    email.msg = 'not empty'
+  } else if (!emailReg.test(email.val)) {
+    email.error = true
+    email.msg = '格式不正确'
+  } else {
+    email.error = false
+    email.msg = ''
+  }
+  console.log(emailReg.test(email.val))
+}
 </script>
