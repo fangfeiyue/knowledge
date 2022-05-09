@@ -1,7 +1,7 @@
 <template>
   <div class="container">
-    <GlobalHeader :user="user" />
-    <!-- <ColumnList :list="list"/> -->
+    <global-header :user="user" />
+    <!-- <column-list :list="list"/> -->
     <form>
       <div class="mb-3">
         <label for="exampleInputEmail1" class="form-label">Email address</label>
@@ -12,6 +12,7 @@
         <label for="exampleInputPassword1" class="form-label">Password</label>
         <input type="password" class="form-control" id="exampleInputPassword1">
       </div>
+      <validate-input :rules="emailRules"/>
     </form>
   </div>
 </template>
@@ -20,6 +21,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import { reactive } from 'vue'
 import ColumnList, { IColumnProps } from './components/ColumnList.vue'
 import GlobalHeader, { IUserProps } from './components/GlobalHeader.vue'
+import ValidateInput, { RulesProp } from './components/ValidateInput.vue'
 
 const user: IUserProps = {
   name: 'fang',
@@ -57,6 +59,11 @@ const email = reactive({
   msg: '',
   error: false
 })
+const emailRules: RulesProp = [
+  { type: 'required', msg: '邮箱地址不能为空' },
+  { type: 'email', msg: '请输入正确的邮箱格式' },
+  { type: 'range', msg: '邮箱长度应该在5-12个字符' }
+]
 const emailReg = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
 const validateEamil = () => {
   if (email.val.trim() === '') {
@@ -69,6 +76,5 @@ const validateEamil = () => {
     email.error = false
     email.msg = ''
   }
-  console.log(emailReg.test(email.val))
 }
 </script>
