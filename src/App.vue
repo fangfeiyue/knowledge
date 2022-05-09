@@ -12,7 +12,7 @@
         <label for="exampleInputPassword1" class="form-label">Password</label>
         <input type="password" class="form-control" id="exampleInputPassword1">
       </div>
-      <validate-input :rules="emailRules" v-model="emailVal"/>
+      <validate-input :rules="emailRules" v-model="emailVal" placeholder="请输入邮箱地址" type="text" />
       {{emailVal}}
     </form>
   </div>

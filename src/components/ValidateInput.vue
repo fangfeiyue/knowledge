@@ -1,7 +1,7 @@
 <template>
   <div class="validate-input-container pb-3">
     <input type="text" class="form-control" :class="{ 'is-invalid': input.err }" :value="input.val"
-      @blur="validateInput" @input="updateValue">
+      @blur="validateInput" @input="updateValue" v-bind="$attrs">
     <span v-if="input.err" class="invalid-feedback">{{ input.msg }}</span>
   </div>
 </template>
@@ -65,5 +65,10 @@ const updateValue = (e: Event) => {
   const val = (e.target as HTMLInputElement).value
   input.val = val
   emit('update:modelValue', val)
+}
+</script>
+<script lang="ts">
+export default {
+  inheritAttrs: false
 }
 </script>

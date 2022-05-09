@@ -31,6 +31,8 @@ const props = defineProps({
 })
 const columnList = computed(() => props.list.map(column => {
   if (!column.avatar) column.avatar = 'https://lf3-cdn-tos.bytescm.com/obj/static/xitu_juejin_web/e08da34488b114bd4c665ba2fa520a31.svg'
+  // 如果是本地图片需要使用 require
+  // column.avatar = require('./1.png')
   return column
 }))
 </script>
