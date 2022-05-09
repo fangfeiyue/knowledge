@@ -12,13 +12,14 @@
         <label for="exampleInputPassword1" class="form-label">Password</label>
         <input type="password" class="form-control" id="exampleInputPassword1">
       </div>
-      <validate-input :rules="emailRules"/>
+      <validate-input :rules="emailRules" v-model="emailVal"/>
+      {{emailVal}}
     </form>
   </div>
 </template>
 <script setup lang="ts">
 import 'bootstrap/dist/css/bootstrap.min.css'
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
 import ColumnList, { IColumnProps } from './components/ColumnList.vue'
 import GlobalHeader, { IUserProps } from './components/GlobalHeader.vue'
 import ValidateInput, { RulesProp } from './components/ValidateInput.vue'
@@ -59,6 +60,7 @@ const email = reactive({
   msg: '',
   error: false
 })
+const emailVal = ref('1@qq.com')
 const emailRules: RulesProp = [
   { type: 'required', msg: '邮箱地址不能为空' },
   { type: 'email', msg: '请输入正确的邮箱格式' },

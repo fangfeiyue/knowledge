@@ -1,22 +1,23 @@
 <template>
   <div class="validate-input-container pb-3">
-    <input type="text" class="form-control" :class="{ 'is-invalid': input.err }" v-model="input.val"
-      @blur="validateInput">
-      {{ input.err && input.msg }}
+    <input type="text" class="form-control" :class="{ 'is-invalid': input.err }" :value="input.val"
+      @blur="validateInput" @input="updateValue">
+    <span v-if="input.err" class="invalid-feedback">{{ input.msg }}</span>
   </div>
 </template>
 <script setup lang="ts">
-import { reactive, PropType, defineProps } from 'vue'
+import { reactive, PropType, defineProps, defineEmits } from 'vue'
 export interface IRuleProp {
   type: 'required' | 'email' | 'range',
   msg: string
 }
 export type RulesProp = IRuleProp[]
 const props = defineProps({
-  rules: Array as PropType<RulesProp>
+  rules: Array as PropType<RulesProp>,
+  modelValue: String
 })
 const input = reactive({
-  val: '',
+  val: props.modelValue || '',
   err: false,
   msg: ''
 })
@@ -47,5 +48,22 @@ const validateInput = () => {
     return passed
   })
   input.err = !allPassed
+}
+
+interface IEvent {
+  (e: 'update:modelValue', val: string): void
+}
+const emit = defineEmits<IEvent>()
+
+const updateValue = (e: Event) => {
+  // Property 'value' does not exist on type 'EventTarget'.
+  // const val = e.target?.value
+
+  // Object is possibly 'null'.
+  // const val = e.target.value
+
+  const val = (e.target as HTMLInputElement).value
+  input.val = val
+  emit('update:modelValue', val)
 }
 </script>
