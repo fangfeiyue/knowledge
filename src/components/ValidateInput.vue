@@ -1,15 +1,24 @@
 <template>
   <div class="validate-input-container pb-3">
     <input type="text" class="form-control" :class="{ 'is-invalid': input.err }" :value="input.val"
-      @blur="validateInput" @input="updateValue" v-bind="$attrs">
+      @blur="validateInput" @input="updateValue" v-bind="$attrs" autocomplete="new-password">
     <span v-if="input.err" class="invalid-feedback">{{ input.msg }}</span>
   </div>
 </template>
 <script setup lang="ts">
-import { reactive, PropType, defineProps, defineEmits } from 'vue'
+import { reactive, PropType, onMounted, defineProps, defineEmits, defineExpose } from 'vue'
+import { emitter } from '../bus/index'
 export interface IRuleProp {
-  type: 'required' | 'email' | 'range',
-  msg: string
+  type: 'required' | 'email' | 'range' | 'password',
+  msg?: string | '',
+  min?: {
+    msg: string,
+    length: number
+  },
+  max?: {
+    msg: string,
+    length: number
+  },
 }
 export type RulesProp = IRuleProp[]
 const props = defineProps({
@@ -26,7 +35,7 @@ const validateInput = () => {
   const { rules } = props
   const allPassed = rules && rules.every(rule => {
     let passed = false
-    input.msg = rule.msg
+    input.msg = rule.msg || ''
     const val = input.val
     const len = val.length
     switch (rule.type) {
@@ -36,25 +45,22 @@ const validateInput = () => {
       case 'email':
         passed = emailReg.test(val)
         break
-      case 'range':
-        console.log(len)
-        passed = len >= 5 && len <= 12
-        console.log('passed', passed)
-        break
       default:
         break
     }
-    console.log(passed)
     return passed
   })
   input.err = !allPassed
+  return allPassed
 }
 
 interface IEvent {
   (e: 'update:modelValue', val: string): void
 }
 const emit = defineEmits<IEvent>()
-
+onMounted(() => {
+  emitter.emit('form-item-created', validateInput)
+})
 const updateValue = (e: Event) => {
   // Property 'value' does not exist on type 'EventTarget'.
   // const val = e.target?.value
@@ -66,9 +72,12 @@ const updateValue = (e: Event) => {
   input.val = val
   emit('update:modelValue', val)
 }
+defineExpose({
+  validateInput
+})
 </script>
-<script lang="ts">
+<!-- <script lang="ts">
 export default {
   inheritAttrs: false
 }
-</script>
+</script> -->
