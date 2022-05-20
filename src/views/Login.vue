@@ -23,8 +23,9 @@
   </div>
 </template>
 <script setup lang="ts">
-import 'bootstrap/dist/css/bootstrap.min.css'
 import { ref } from 'vue'
+import { useStore } from 'vuex'
+import 'bootstrap/dist/css/bootstrap.min.css'
 import { useRouter } from 'vue-router'
 import ValidateInput, { RulesProp } from '../components/ValidateInput.vue'
 import ValidateForm from '../components/ValidateForm.vue'
@@ -33,6 +34,7 @@ const router = useRouter()
 const inputRef = ref()
 const emailVal = ref('')
 const passwordVal = ref('')
+const store = useStore()
 
 const emailRules: RulesProp = [
   { type: 'required', msg: '邮箱地址不能为空' },
@@ -45,6 +47,7 @@ const passwordRules: RulesProp = [
 const onFormSubmit = (res: boolean) => {
   if (res) {
     router.push('/')
+    store.commit('login')
   }
 }
 </script>

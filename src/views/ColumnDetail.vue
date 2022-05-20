@@ -13,11 +13,18 @@
   </div>
 </template>
 <script setup lang="ts">
+import { computed } from 'vue'
+import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
-import { testData, testPosts } from '../mock/data'
 import PostList from '../components/PostList.vue'
+
 const route = useRoute()
 const curId = +route.params.id
-const column = testData.find(item => item.id === curId)
-const list = testPosts.filter(post => post.columnId === curId)
+const store = useStore()
+
+const column = computed(() => store.getters.getColumnById(curId))
+const list = computed(() => store.getters.getPostByCid(curId))
+console.log('list', list)
+// const column = testData.find(item => item.id === curId)
+// const list = testPosts.filter(post => post.columnId === curId)
 </script>
