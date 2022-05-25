@@ -30,12 +30,14 @@ export interface IPostsProps {
   isHTML?: boolean;
 }
 export interface IGlobalDataProps {
+  isLoading: boolean,
   columns: IColumnProps[],
   posts: IPostsProps[],
   user: IUserProps
 }
 const store = createStore<IGlobalDataProps>({
   state: {
+    isLoading: false,
     posts: [],
     columns: [],
     user: {
@@ -61,6 +63,9 @@ const store = createStore<IGlobalDataProps>({
     getPosts(state, data) {
       state.posts = data
       // state.posts = data.data.list
+    },
+    setLoading(state, payload) {
+      state.isLoading = payload
     }
   },
   getters: {
@@ -68,22 +73,28 @@ const store = createStore<IGlobalDataProps>({
     getPostByCid: (state) => (cid: string) => state.posts.filter(item => item.column === cid)
   },
   actions: {
-    fetchColumns({ commit }) {
-      getColumns().then(res => {
-        const { list } = res
-        commit('getColumns', list)
-      })
+    async fetchColumns({ commit }) {
+      const { list } = await getColumns()
+      commit('getColumns', list)
+      // getColumns().then(res => {
+      //   const { list } = res
+      //   commit('getColumns', list)
+      // })
     },
-    fetchColum({ commit }, cid) {
-      getColumn(cid).then(res => {
-        commit('getColumn', res)
-      })
+    async fetchColum({ commit }, cid) {
+      const data = await getColumn(cid)
+      commit('getColumn', data)
+      // getColumn(cid).then(res => {
+      //   commit('getColumn', res)
+      // })
     },
-    fetchPosts({ commit }, cid) {
-      getPosts(cid).then(res => {
-        const list = res.list
-        commit('getPosts', list)
-      })
+    async fetchPosts({ commit }, cid) {
+      const { list } = await getPosts(cid)
+      commit('getPosts', list)
+      // getPosts(cid).then(res => {
+      //   const list = res.list
+      //   commit('getPosts', list)
+      // })
     }
   }
 })

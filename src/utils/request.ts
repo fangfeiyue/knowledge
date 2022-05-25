@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { BASE_URL, ICODE } from '../config/index'
 import storage from './storage'
+import store from '../store/index'
 
 const TOKEN_INVALID = 'Token认证失败，请重新登录'
 const NETWORK_ERROR = '网络请求异常，请稍后重试'
@@ -11,6 +12,7 @@ const service = axios.create({
 })
 
 service.interceptors.request.use((req) => {
+  store.commit('setLoading', true)
   const headers = req.headers
   const { token = '' } = storage.getItem('userInfo') || { token: '' }
   if (headers && !headers.Authorization) headers.Authorization = 'Bearer ' + token
@@ -25,6 +27,10 @@ service.interceptors.request.use((req) => {
 
 service.interceptors.response.use((res) => {
   const { code, data, msg } = res.data
+
+  // await new Promise(resolve => setTimeout(() => resolve(1), 1000))
+
+  setTimeout(() => store.commit('setLoading'), 1000)
 
   if (code === 0) {
     return data

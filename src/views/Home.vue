@@ -18,6 +18,7 @@
     >
       加载更多
     </button>
+    <loading v-if="isLoading"/>
   </div>
 </template>
 
@@ -26,6 +27,7 @@ import { IGlobalDataProps } from '../store/index'
 import { useStore } from 'vuex'
 import { computed, onMounted } from 'vue'
 import ColumnList from '../components/ColumnList.vue'
+import Loading from '@/components/Loading.vue'
 
 const store = useStore<IGlobalDataProps>()
 
@@ -34,4 +36,5 @@ onMounted(() => {
 })
 
 const list = computed(() => store.state.columns)
+const isLoading = computed(() => store.state.isLoading)
 </script>
