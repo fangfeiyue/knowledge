@@ -1,8 +1,30 @@
 <template>
   <div class="validate-input-container pb-3">
-    <input type="text" class="form-control" :class="{ 'is-invalid': input.err }" :value="input.val"
-      @blur="validateInput" @input="updateValue" v-bind="$attrs" autocomplete="new-password">
-    <span v-if="input.err" class="invalid-feedback">{{ input.msg }}</span>
+    <input
+      v-if="tag === 'input'"
+      type="text"
+      class="form-control"
+      :class="{ 'is-invalid': input.err }"
+      :value="input.val"
+      @blur="validateInput"
+      @input="updateValue"
+      v-bind="$attrs"
+      autocomplete="new-password">
+    <textarea
+      v-else
+      class="form-control"
+      :class="{'is-invalid': input.err}"
+      :value="input.val"
+      @blur="validateInput"
+      @input="updateValue"
+      v-bind="$attrs"
+    ></textarea>
+    <span
+      v-if="input.err"
+      class="invalid-feedback"
+    >
+      {{ input.msg }}
+    </span>
   </div>
 </template>
 <script setup lang="ts">
@@ -21,9 +43,14 @@ export interface IRuleProp {
   },
 }
 export type RulesProp = IRuleProp[]
+export type TagType = 'input' | 'textarea'
 const props = defineProps({
   rules: Array as PropType<RulesProp>,
-  modelValue: String
+  modelValue: String,
+  tag: {
+    type: String as PropType<TagType>,
+    default: 'input'
+  }
 })
 const input = reactive({
   val: props.modelValue || '',
