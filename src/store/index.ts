@@ -32,7 +32,12 @@ export interface IPostsProps {
   author?: string | IUserProps;
   isHTML?: boolean;
 }
+export interface IGlobalError {
+  msg: string,
+  status?: boolean
+}
 export interface IGlobalDataProps {
+  error: IGlobalError,
   isLoading: boolean,
   token: string,
   columns: IColumnProps[],
@@ -41,6 +46,7 @@ export interface IGlobalDataProps {
 }
 const store = createStore<IGlobalDataProps>({
   state: {
+    error: { msg: '', status: false },
     isLoading: false,
     token: storage.getItem('token') || '',
     posts: [],
@@ -72,6 +78,9 @@ const store = createStore<IGlobalDataProps>({
     },
     setLoading(state, payload) {
       state.isLoading = payload
+    },
+    setError(state, err) {
+      state.error = err
     }
   },
   getters: {
@@ -108,7 +117,7 @@ const store = createStore<IGlobalDataProps>({
       return res
     },
     async fetchLogin({ commit }, params) {
-      const { token } = await login(params)
+      const { token = '' } = await login(params)
       commit('login', token)
       return token
     },

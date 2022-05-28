@@ -13,6 +13,7 @@ const service = axios.create({
 
 service.interceptors.request.use((req) => {
   store.commit('setLoading', true)
+  store.commit('setError', { status: false, msg: '' })
   const headers = req.headers
   const token = storage.getItem('token') || ''
 
@@ -28,10 +29,11 @@ service.interceptors.request.use((req) => {
 
 service.interceptors.response.use((res) => {
   const { code, data, msg } = res.data
+  console.log('resss', res)
 
   // await new Promise(resolve => setTimeout(() => resolve(1), 1000))
 
-  setTimeout(() => store.commit('setLoading'), 500)
+  setTimeout(() => store.commit('setLoading', false), 500)
 
   if (code === 0) {
     return data
@@ -44,6 +46,10 @@ service.interceptors.response.use((res) => {
     console.error(msg || NETWORK_ERROR)
     return Promise.reject(msg || NETWORK_ERROR)
   }
+}, err => {
+  const { error } = err.response.data
+  store.commit('setError', { status: true, msg: error })
+  store.commit('setLoading', false)
 })
 
 interface IOptions {
