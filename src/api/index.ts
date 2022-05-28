@@ -20,3 +20,15 @@ export function getColumn(params?: any) {
     data: null
   })
 }
+export function login(params?: any) {
+  return ajax.post({
+    url: '/user/login',
+    data: params
+  })
+}
+export function getUser(params?: any) {
+  return ajax.get({
+    url: '/user/current',
+    data: params
+  })
+}

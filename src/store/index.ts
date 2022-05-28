@@ -1,10 +1,13 @@
 import { createStore } from 'vuex'
-import { getColumns, getPosts, getColumn } from '../api/index'
+import storage from '@/utils/storage'
+import { getColumns, getPosts, getColumn, login, getUser } from '../api/index'
 export interface IUserProps {
   isLogin: boolean,
-  name?: string,
-  id?: number,
-  columnId?: number
+  nickName?: string,
+  _id?: number,
+  column?: number,
+  email?: string,
+  description?: string
 }
 export interface IImageProps {
   _id?: string,
@@ -31,6 +34,7 @@ export interface IPostsProps {
 }
 export interface IGlobalDataProps {
   isLoading: boolean,
+  token: string,
   columns: IColumnProps[],
   posts: IPostsProps[],
   user: IUserProps
@@ -38,17 +42,16 @@ export interface IGlobalDataProps {
 const store = createStore<IGlobalDataProps>({
   state: {
     isLoading: false,
+    token: storage.getItem('token') || '',
     posts: [],
     columns: [],
-    user: {
-      name: 'f',
-      columnId: 1,
-      isLogin: true
-    }
+    user: { isLogin: false }
   },
   mutations: {
-    login(state) {
-      state.user = { ...state.user, isLogin: true, name: 'f' }
+    login(state, token) {
+      // state.user = { ...state.user, isLogin: true, name: 'f' }
+      storage.setItem('token', token)
+      state.token = token
     },
     createPost(state, newPost) {
       state.posts.push(newPost)
@@ -63,6 +66,9 @@ const store = createStore<IGlobalDataProps>({
     getPosts(state, data) {
       state.posts = data
       // state.posts = data.data.list
+    },
+    setUser(state, user) {
+      state.user = { isLogin: true, ...user }
     },
     setLoading(state, payload) {
       state.isLoading = payload
@@ -95,7 +101,26 @@ const store = createStore<IGlobalDataProps>({
       //   const list = res.list
       //   commit('getPosts', list)
       // })
+    },
+    async fetchUser({ commit }) {
+      const res = await getUser()
+      commit('setUser', res)
+      return res
+    },
+    async fetchLogin({ commit }, params) {
+      const { token } = await login(params)
+      commit('login', token)
+      return token
+    },
+    fetchLoginAndUser({ dispatch }, params) {
+      return dispatch('fetchLogin', params).then(() => {
+        return dispatch('fetchUser')
+      })
     }
+    // async fetchLoginAndUser({ dispatch }, params) {
+    //   await dispatch('fetchLogin', params)
+    //   return dispatch('fetchUser')
+    // }
   }
 })
 export default store

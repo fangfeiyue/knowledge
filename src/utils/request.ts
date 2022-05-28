@@ -14,7 +14,8 @@ const service = axios.create({
 service.interceptors.request.use((req) => {
   store.commit('setLoading', true)
   const headers = req.headers
-  const { token = '' } = storage.getItem('userInfo') || { token: '' }
+  const token = storage.getItem('token') || ''
+
   if (headers && !headers.Authorization) headers.Authorization = 'Bearer ' + token
   req.params = { ...req.params, icode: ICODE }
   if (req.data instanceof FormData) {
@@ -30,7 +31,7 @@ service.interceptors.response.use((res) => {
 
   // await new Promise(resolve => setTimeout(() => resolve(1), 1000))
 
-  setTimeout(() => store.commit('setLoading'), 1000)
+  setTimeout(() => store.commit('setLoading'), 500)
 
   if (code === 0) {
     return data
