@@ -11,7 +11,7 @@ const service = axios.create({
   timeout: 5000
 })
 
-service.interceptors.request.use((req) => {
+service.interceptors.request.use((req:any) => {
   store.commit('setLoading', true)
   store.commit('setError', { status: false, msg: '' })
   const headers = req.headers
@@ -27,7 +27,7 @@ service.interceptors.request.use((req) => {
   return req
 })
 
-service.interceptors.response.use((res) => {
+service.interceptors.response.use((res:any) => {
   const { code, data, msg } = res.data
   console.log('resss', res)
 
@@ -46,7 +46,7 @@ service.interceptors.response.use((res) => {
     console.error(msg || NETWORK_ERROR)
     return Promise.reject(msg || NETWORK_ERROR)
   }
-}, err => {
+}, (err: any) => {
   const { error } = err.response.data
   store.commit('setError', { status: true, msg: error })
   store.commit('setLoading', false)
