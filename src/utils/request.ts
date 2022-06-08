@@ -8,7 +8,10 @@ const NETWORK_ERROR = '网络请求异常，请稍后重试'
 
 const service = axios.create({
   baseURL: BASE_URL,
-  timeout: 5000
+  timeout: 5000,
+  headers: {
+    'Content-Type': 'application/json'
+  }
 })
 
 service.interceptors.request.use((req:any) => {
@@ -18,12 +21,18 @@ service.interceptors.request.use((req:any) => {
   const token = storage.getItem('token') || ''
 
   if (headers && !headers.Authorization) headers.Authorization = 'Bearer ' + token
+  console.log('reqqqq', req)
+  // if (req.data && req.data.customHeaders) {
+  //   headers['Content-Type'] = req.data.customHeaders['Content-Type']
+  // }
+
   req.params = { ...req.params, icode: ICODE }
   if (req.data instanceof FormData) {
     req.data.append('icode', ICODE)
   } else {
     req.data = { ...req.data, icode: ICODE }
   }
+  console.log('reqqqq', req)
   return req
 })
 
@@ -50,6 +59,7 @@ service.interceptors.response.use((res:any) => {
   const { error } = err.response.data
   store.commit('setError', { status: true, msg: error })
   store.commit('setLoading', false)
+  return Promise.reject(err)
 })
 
 interface IOptions {
@@ -65,7 +75,8 @@ function request(options:IOptions) {
 interface IParams {
   url: string,
   data: any,
-  options?: any
+  options?: any,
+  customHeaders?: any
 }
 
 request.get = function({ url, data, options }: IParams) {

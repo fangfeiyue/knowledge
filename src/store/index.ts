@@ -9,6 +9,11 @@ export interface IUserProps {
   email?: string,
   description?: string
 }
+export interface IResponseType<P = Record<string, never>> {
+  code: number,
+  msg: string,
+  data: P
+}
 export interface IImageProps {
   _id?: string,
   url?: string,
