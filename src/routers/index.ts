@@ -3,6 +3,7 @@ import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
 import CreatePost from '../views/CreatePost.vue'
 import ColumnDetail from '../views/ColumnDetail.vue'
+import Signup from '@/views/Signup.vue'
 import store from '../store/index'
 
 const routerHistory = createWebHistory()
@@ -18,6 +19,12 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: Login,
+      meta: { isLoginPage: true }
+    },
+    {
+      path: '/signup',
+      name: 'signup',
+      component: Signup,
       meta: { isLoginPage: true }
     },
     {

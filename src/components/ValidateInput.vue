@@ -31,7 +31,7 @@
 import { reactive, PropType, onMounted, defineProps, defineEmits, defineExpose } from 'vue'
 import { emitter } from '../bus/index'
 export interface IRuleProp {
-  type: 'required' | 'email' | 'range' | 'password',
+  type: 'required' | 'email' | 'range' | 'password' | 'custom',
   msg?: string | '',
   min?: {
     msg: string,
@@ -41,6 +41,7 @@ export interface IRuleProp {
     msg: string,
     length: number
   },
+  validator?: ()=>boolean
 }
 export type RulesProp = IRuleProp[]
 export type TagType = 'input' | 'textarea'
@@ -64,13 +65,15 @@ const validateInput = () => {
     let passed = false
     input.msg = rule.msg || ''
     const val = input.val
-    const len = val.length
     switch (rule.type) {
       case 'required':
         passed = val.trim() !== ''
         break
       case 'email':
         passed = emailReg.test(val)
+        break
+      case 'custom':
+        passed = rule.validator?.() || true
         break
       default:
         break
