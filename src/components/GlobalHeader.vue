@@ -11,7 +11,7 @@
           <drop-down-item><router-link to="/create" class="dropdown-item">新建文章</router-link></drop-down-item>
           <drop-down-item><router-link :to="`/column/${user._id}`" class="dropdown-item">我的专栏</router-link></drop-down-item>
           <drop-down-item disabled><a href="#" class="dropdown-item">编辑资料</a></drop-down-item>
-          <drop-down-item><a href="#" class="dropdown-item">退出登陆</a></drop-down-item>
+          <drop-down-item><a href="#" class="dropdown-item" @click="logout">退出登陆</a></drop-down-item>
         </drop-down>
       </li>
     </ul>
@@ -21,11 +21,21 @@
 import { defineProps, PropType } from 'vue'
 import DropDown from './DropDown.vue'
 import DropDownItem from './DropDownItem.vue'
-import { IUserProps } from '@/store/index'
+import store, { IUserProps } from '@/store/index'
+import storage from '@/utils/storage'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
 defineProps({
   user: {
     type: Object as PropType<IUserProps>,
     required: true
   }
 })
+const logout = () => {
+  storage.clearItem('token')
+  store.commit('setAuth', false)
+  router.replace('/')
+}
 </script>
