@@ -29,6 +29,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import { useRouter } from 'vue-router'
 import ValidateInput, { RulesProp } from '../components/ValidateInput.vue'
 import ValidateForm from '../components/ValidateForm.vue'
+import createMessage from '@/components/createMessage'
 
 const router = useRouter()
 const inputRef = ref()
@@ -51,8 +52,10 @@ const onFormSubmit = (res: boolean) => {
       password: passwordVal.value
     }
     store.dispatch('fetchLoginAndUser', payload).then(token => {
-      console.log(token)
-      router.push('/')
+      createMessage('登录成功，正在跳转页面。。。', 'success', 1000)
+      setTimeout(() => {
+        router.push('/')
+      }, 1000)
     })
   }
 }
