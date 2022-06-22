@@ -43,7 +43,6 @@ import createMessage from '@/components/createMessage'
 
 const route = useRoute()
 const postId = route.params.id
-const showEditArea = ''
 const modalIsVisible = false
 const hideAndDelete = false
 const currentPost = computed<IPostProps>(() => store.getters.getCurrentPost(postId))
@@ -56,6 +55,14 @@ const currentImageUrl = computed(() => {
   } else {
     return null
   }
+})
+const showEditArea = computed(() => {
+  const { isLogin, _id } = store.state.user
+  if (currentPost.value && currentPost.value.author && isLogin) {
+    const author = currentPost.value.author as IUserProps
+    return author._id === _id
+  }
+  return false
 })
 const currentHTML = computed(() => {
   if (currentPost.value && currentPost.value.content) {
