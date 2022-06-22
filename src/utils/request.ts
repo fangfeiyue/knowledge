@@ -21,7 +21,6 @@ service.interceptors.request.use((req:any) => {
   const token = storage.getItem('token') || ''
 
   if (headers && !headers.Authorization) headers.Authorization = 'Bearer ' + token
-  console.log('reqqqq', req)
   // if (req.data && req.data.customHeaders) {
   //   headers['Content-Type'] = req.data.customHeaders['Content-Type']
   // }
@@ -32,7 +31,6 @@ service.interceptors.request.use((req:any) => {
   } else {
     req.data = { ...req.data, icode: ICODE }
   }
-  console.log('reqqqq', req)
   return req
 })
 
@@ -48,7 +46,8 @@ service.interceptors.response.use((res:any) => {
     return data
   } else if (code === 50001) {
     setTimeout(() => {
-      // router.push('/login')
+      storage.setItem('token', '')
+      store.commit('setAuth', false)
     }, 1500)
     return Promise.reject(TOKEN_INVALID)
   } else {
