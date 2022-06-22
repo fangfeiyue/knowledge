@@ -45,7 +45,7 @@ const props = defineProps({
 const emit = defineEmits(['file-uploaded', 'file-uploaded-error'])
 
 const fileStatus = ref<UploadStatus>('ready')
-const fileInput = ref<HTMLInputElement|null>(null)
+const fileInput = ref<HTMLInputElement | null>(null)
 const uploadedData = ref(props.uploaded)
 
 const triggerUpload = () => {
@@ -55,6 +55,7 @@ const triggerUpload = () => {
 }
 const handleFileChange = (e: Event) => {
   const target = e.target as HTMLInputElement
+
   if (target.files) {
     const files = Array.from(target.files)
     console.log('files', files)
@@ -67,7 +68,6 @@ const handleFileChange = (e: Event) => {
 
     upload(formData).then(res => {
       fileStatus.value = 'success'
-      console.log('fileStatus.value', fileStatus.value)
       uploadedData.value = res
       emit('file-uploaded', res)
     }).catch(error => {
@@ -80,5 +80,13 @@ const handleFileChange = (e: Event) => {
       }
     })
   }
+  fileInput.value = null
 }
 </script>
+<style scoped>
+.file-upload-container {
+  height: 200px;
+  cursor: pointer;
+  overflow: hidden;
+}
+</style>
