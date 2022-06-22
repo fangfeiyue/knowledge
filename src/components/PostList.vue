@@ -7,7 +7,7 @@
         </h4>
         <div class="row my-3 align-items-center">
           <div v-if="post.image && typeof post.image !== 'string'" class="col-4">
-            <img :src="post.image && post.image.fitUrl" :alt="post.title" class="rounded-lg w-100"/>
+          <img :src="post.image.fitUrl" :alt="post.title" class="rounded-lg w-100"/>
           </div>
           <p :class="{'col-8': post.image}" class="text-muted">{{post.excerpt}}</p>
         </div>
@@ -17,16 +17,21 @@
   </div>
 </template>
 <script setup lang="ts">
+import { generateFitUrl } from '@/utils/utils'
 import { computed, PropType, defineProps } from 'vue'
 import { IPostsProps, IImageProps } from '../store/index'
+
 const props = defineProps({
   list: {
     required: true,
     type: Array as PropType<IPostsProps[]>
   }
 })
-computed(() => {
+const list = computed(() => {
   return props.list.map(post => {
+    // Argument of type 'IImageProps | undefined' is not assignable to parameter of type 'IImageProps'.
+    // generateFitUrl(post.image, 200, 110, ['m_fill'])
+
     generateFitUrl(post.image as IImageProps, 200, 110, ['m_fill'])
     return post
   })
