@@ -54,3 +54,17 @@ export function upload(params?: any):Promise<any> {
     data: params
   })
 }
+
+export function getPostDetail(params?:any):Promise<any> {
+  return ajax.get({
+    url: `/posts/${params}`,
+    data: null
+  })
+}
+
+export function createPost(params?: any) {
+  return ajax.post({
+    url: '/posts',
+    data: params
+  })
+}
